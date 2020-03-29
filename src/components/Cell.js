@@ -13,10 +13,10 @@ function Cell(props) {
 
 
     return (
-        <div>
-            Row: {posX} Column: {posY}
-            { isStart && <span> 🏃‍♂️</span> }
-            { isFinish && <span> 🏁</span> }
+        <div className={props.className}>
+            {posX}-{posY}
+            { isStart && <span role="img" aria-label="start"> 🏃‍♂️</span> }
+            { isFinish && <span role="img" aria-label="finish"> 🏁</span> }
         </div>
     )
 

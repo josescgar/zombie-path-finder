@@ -1,5 +1,6 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import Cell from './Cell';
+import './Board.css';
 
 const initialBoardState = {
     board: []
@@ -39,15 +40,20 @@ function Board(props) {
 
     const [boardState, boardDispatch] = useReducer(boardReducer, initialBoardState);
 
+    const [gridStyle, setGridStyle] = useState(null);
+
     useEffect(() => {
         boardDispatch({ type: 'reset', payload: props.setup });
+        setGridStyle({
+            gridTemplate: `repeat(${props.setup.rows}, 1fr) / repeat(${props.setup.columns}, 1fr)`
+        });
     }, [props.setup]);
 
     return (
-        <div className="board">
+        <div className="board" style={gridStyle}>
             {boardState.board.map((row) => {
                 return row.map((cell) => (
-                    <Cell cell={cell} key={cell.id}/>
+                    <Cell className="cell" cell={cell} key={cell.id}/>
                 ))
             })}
         </div>
