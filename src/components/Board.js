@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useReducer, } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import Cell from './Cell';
 
 const initialBoardState = {
     board: []
 };
 
-function resetBoard({ rows, columns }) {
+function resetBoard(setup) {
+    const { rows, columns, start, finish } = setup;
+
     return {
         ...initialBoardState,
         board: Array(rows).fill()
@@ -15,8 +17,8 @@ function resetBoard({ rows, columns }) {
                         id: `${i}${j}`,
                         posX: i,
                         posY: j,
-                        isStart: false,
-                        isFinish: false,
+                        isStart: i === start.row && j === start.column,
+                        isFinish: i === finish.row && j === finish.column,
                         isBusy: false  
                     }));
             })
@@ -35,16 +37,11 @@ function boardReducer(state, action) {
 
 function Board(props) {
 
-    const {
-        rows,
-        columns
-    } = props;
-
     const [boardState, boardDispatch] = useReducer(boardReducer, initialBoardState);
 
     useEffect(() => {
-        boardDispatch({ type: 'reset', payload: { rows, columns }});
-    }, [rows, columns]);
+        boardDispatch({ type: 'reset', payload: props.setup });
+    }, [props.setup]);
 
     return (
         <div className="board">
