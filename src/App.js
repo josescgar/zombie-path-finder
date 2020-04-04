@@ -5,8 +5,9 @@ function App() {
   const [setup] = useState({
     rows: 10,
     columns: 16,
-    start: { row: 2, column: 3 },
-    finish: { row: 7, column: 12 }
+    start: { row: 1, column: 14 },
+    finish: { row: 7, column: 12 },
+    stepDelay: 25
   });
 
   return (

@@ -31,3 +31,8 @@ code {
 .is-stacked {
   background-color: orange;
 }
+
+.is-path {
+  font-weight: bold;
+  color: red;
+}

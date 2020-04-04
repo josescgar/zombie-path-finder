@@ -16,13 +16,14 @@ function resetBoard(setup) {
                 return Array(columns).fill()
                     .map((_, j) => ({
                         id: `${i}${j}`,
-                        posX: i,
-                        posY: j,
+                        row: i,
+                        col: j,
                         isStart: i === start.row && j === start.column,
                         isFinish: i === finish.row && j === finish.column,
                         isBusy: false,
                         isVisited: false,
-                        isStacked: false
+                        isStacked: false,
+                        isPath: false
                     }));
             })
     };
@@ -40,11 +41,13 @@ function boardReducer(state, action) {
                         return j !== payload.column ? cell : {
                             ...cell,
                             isVisited: type === 'visit' || cell.isVisited,
-                            isStacked: type === 'stack' || cell.isStacked
+                            isStacked: type === 'stack' || cell.isStacked,
+                            isPath: type === 'path' || cell.isPath
                         };
                     })
                 })
             };
+
         case 'reset':
             return resetBoard(payload);
         default:
@@ -66,13 +69,16 @@ function Board(props) {
     }, [props.setup]);
 
     function calculatePath(e) {
-        DFSSearch(
+        const path = DFSSearch(
             boardState.board,
             props.setup.start,
             props.setup.finish,
             (row, column) => boardDispatch({ type: 'visit', payload: { row, column } }),
-            (row, column) => boardDispatch({ type: 'stack', payload: { row, column } })
+            (row, column) => boardDispatch({ type: 'stack', payload: { row, column } }),
+            props.setup.stepDelay
         );
+
+        boardDispatch({ type: 'found', payload: { path } })
     }
 
     return (

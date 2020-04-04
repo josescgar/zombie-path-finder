@@ -5,23 +5,25 @@ function Cell(props) {
 
     const {
         cell: {
-            posX,
-            posY,
+            row,
+            col,
             isStart,
             isFinish,
             isVisited,
-            isStacked
+            isStacked,
+            isPath
         }
     } = props;
 
     const classes = classNames('cell', {
         'is-visited': isVisited,
-        'is-stacked': isStacked
+        'is-stacked': !isVisited && isStacked,
+        'is-path': isPath
     });
 
     return (
         <div className={classes}>
-            {posX}-{posY}
+            {row}-{col}
             { isStart && <span role="img" aria-label="start"> 🏃‍♂️</span> }
             { isFinish && <span role="img" aria-label="finish"> 🏁</span> }
         </div>
