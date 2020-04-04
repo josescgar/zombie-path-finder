@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 function Cell(props) {
 
@@ -7,13 +8,19 @@ function Cell(props) {
             posX,
             posY,
             isStart,
-            isFinish
+            isFinish,
+            isVisited,
+            isStacked
         }
     } = props;
 
+    const classes = classNames('cell', {
+        'is-visited': isVisited,
+        'is-stacked': isStacked
+    });
 
     return (
-        <div className={props.className}>
+        <div className={classes}>
             {posX}-{posY}
             { isStart && <span role="img" aria-label="start"> 🏃‍♂️</span> }
             { isFinish && <span role="img" aria-label="finish"> 🏁</span> }

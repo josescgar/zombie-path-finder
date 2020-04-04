@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
+import { DFSSearch } from '../algorithms';
 import Cell from './Cell';
-import './Board.css';
 
 const initialBoardState = {
     board: []
@@ -20,7 +20,9 @@ function resetBoard(setup) {
                         posY: j,
                         isStart: i === start.row && j === start.column,
                         isFinish: i === finish.row && j === finish.column,
-                        isBusy: false  
+                        isBusy: false,
+                        isVisited: false,
+                        isStacked: false
                     }));
             })
     };
@@ -29,6 +31,20 @@ function resetBoard(setup) {
 function boardReducer(state, action) {
     const { type, payload } = action;
     switch (type) {
+        case 'visit':
+        case 'stack':
+            return {
+                ...state,
+                board: state.board.map((row, i) => {
+                    return i !== payload.row ? row : row.map((cell, j) => {
+                        return j !== payload.column ? cell : {
+                            ...cell,
+                            isVisited: type === 'visit' || cell.isVisited,
+                            isStacked: type === 'stack' || cell.isStacked
+                        };
+                    })
+                })
+            };
         case 'reset':
             return resetBoard(payload);
         default:
@@ -49,13 +65,28 @@ function Board(props) {
         });
     }, [props.setup]);
 
+    function calculatePath(e) {
+        DFSSearch(
+            boardState.board,
+            props.setup.start,
+            props.setup.finish,
+            (row, column) => boardDispatch({ type: 'visit', payload: { row, column } }),
+            (row, column) => boardDispatch({ type: 'stack', payload: { row, column } })
+        );
+    }
+
     return (
-        <div className="board" style={gridStyle}>
-            {boardState.board.map((row) => {
-                return row.map((cell) => (
-                    <Cell className="cell" cell={cell} key={cell.id}/>
-                ))
-            })}
+        <div>
+            <div>
+                <button onClick={calculatePath}>Calculate</button>
+            </div>
+            <div className="board" style={gridStyle}>
+                {boardState.board.map((row) => {
+                    return row.map((cell) => (
+                        <Cell cell={cell} key={cell.id}/>
+                    ))
+                })}
+            </div>
         </div>
     );
 }
