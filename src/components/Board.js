@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { DFSSearch } from '../algorithms';
+import { Stepper } from '../utils';
 import Cell from './Cell';
 
 const initialBoardState = {
@@ -34,6 +35,7 @@ function boardReducer(state, action) {
     switch (type) {
         case 'visit':
         case 'stack':
+        case 'path':
             return {
                 ...state,
                 board: state.board.map((row, i) => {
@@ -47,7 +49,6 @@ function boardReducer(state, action) {
                     })
                 })
             };
-
         case 'reset':
             return resetBoard(payload);
         default:
@@ -68,18 +69,21 @@ function Board(props) {
         });
     }, [props.setup]);
 
-    function calculatePath(e) {
+    function calculatePath() {
+        const stepper = new Stepper(boardDispatch, props.setup.stepDelay);
+
         const path = DFSSearch(
             boardState.board,
             props.setup.start,
             props.setup.finish,
-            (row, column) => boardDispatch({ type: 'visit', payload: { row, column } }),
-            (row, column) => boardDispatch({ type: 'stack', payload: { row, column } }),
-            props.setup.stepDelay
+            (row, column) => stepper.exec({ type: 'visit', payload: { row, column } }),
+            (row, column) => stepper.exec({ type: 'stack', payload: { row, column } })
         );
 
-        boardDispatch({ type: 'found', payload: { path } })
+        path.forEach((cell) => stepper.exec({ type: 'path', payload: { row: cell.row, column: cell.col } }));
     }
+
+    
 
     return (
         <div>

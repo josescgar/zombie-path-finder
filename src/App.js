@@ -7,7 +7,7 @@ function App() {
     columns: 16,
     start: { row: 1, column: 14 },
     finish: { row: 7, column: 12 },
-    stepDelay: 25
+    stepDelay: 10
   });
 
   return (

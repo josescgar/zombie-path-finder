@@ -1,7 +1,4 @@
-export function DFSSearch(matrix, start, finish, onVisit, onStack, stepDelay) {
-    console.log("Calculating DFS!");
-
-
+export function DFSSearch(matrix, start, finish, onVisit, onStack) {
     const visited = [];
     const stacked = [];
 
@@ -52,7 +49,7 @@ export function DFSSearch(matrix, start, finish, onVisit, onStack, stepDelay) {
             onStack(elRow, elCol - 1);
         }
 
-        setTimeout(() => dfs(visited, stacked), stepDelay);
+        dfs(visited, stacked);
     }
 }
 
