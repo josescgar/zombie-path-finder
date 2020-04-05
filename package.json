@@ -21,8 +21,9 @@
     "deploy": "gh-pages -d build"
   },
   "husky": {
-    "hooks": {
-      "pre-push": "npm run deploy"
+      "hooks": {
+        "pre-push": "npm run deploy"
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
