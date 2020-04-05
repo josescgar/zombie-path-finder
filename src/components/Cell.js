@@ -11,18 +11,20 @@ function Cell(props) {
             isFinish,
             isVisited,
             isStacked,
-            isPath
+            isPath,
+            isBlocked
         }
     } = props;
 
     const classes = classNames('cell', {
         'is-visited': isVisited,
         'is-stacked': !isVisited && isStacked,
-        'is-path': isPath
+        'is-path': isPath,
+        'is-blocked': isBlocked
     });
 
     return (
-        <div className={classes}>
+        <div className={classes} onClick={props.onClick}>
             {row}-{col}
             { isStart && <span role="img" aria-label="start"> 🏃‍♂️</span> }
             { isFinish && <span role="img" aria-label="finish"> 🏁</span> }

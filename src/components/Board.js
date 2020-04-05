@@ -21,7 +21,7 @@ function resetBoard(setup) {
                         col: j,
                         isStart: i === start.row && j === start.column,
                         isFinish: i === finish.row && j === finish.column,
-                        isBusy: false,
+                        isBlocked: false,
                         isVisited: false,
                         isStacked: false,
                         isPath: false
@@ -36,6 +36,7 @@ function boardReducer(state, action) {
         case 'visit':
         case 'stack':
         case 'path':
+        case 'block':
             return {
                 ...state,
                 board: state.board.map((row, i) => {
@@ -44,7 +45,8 @@ function boardReducer(state, action) {
                             ...cell,
                             isVisited: type === 'visit' || cell.isVisited,
                             isStacked: type === 'stack' || cell.isStacked,
-                            isPath: type === 'path' || cell.isPath
+                            isPath: type === 'path' || cell.isPath,
+                            isBlocked: type === 'block' || cell.isBlocked
                         };
                     })
                 })
@@ -83,7 +85,9 @@ function Board(props) {
         path.forEach((cell) => stepper.exec({ type: 'path', payload: { row: cell.row, column: cell.col } }));
     }
 
-    
+    function blockCell(cell) {
+        boardDispatch({ type: 'block', payload: { row: cell.row, column: cell.col }});
+    }
 
     return (
         <div>
@@ -93,7 +97,7 @@ function Board(props) {
             <div className="board" style={gridStyle}>
                 {boardState.board.map((row) => {
                     return row.map((cell) => (
-                        <Cell cell={cell} key={cell.id}/>
+                        <Cell cell={cell} key={cell.id} onClick={() => blockCell(cell)}/>
                     ))
                 })}
             </div>

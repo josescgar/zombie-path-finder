@@ -36,3 +36,7 @@ code {
   font-weight: bold;
   color: red;
 }
+
+.is-blocked {
+ background-color: grey;
+}

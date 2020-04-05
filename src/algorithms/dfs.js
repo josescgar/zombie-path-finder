@@ -10,8 +10,6 @@ export function DFSSearch(matrix, start, finish, onVisit, onStack) {
     dfs(visited, stacked);
     
     return visited;
-    
-
 
     function dfs(visited, stacked) {
 
@@ -29,24 +27,28 @@ export function DFSSearch(matrix, start, finish, onVisit, onStack) {
         visited.push(element);
         onVisit(elRow, elCol);
 
-        if (elRow - 1 >= 0 && !visited.find((cell) => cell.row === elRow - 1 && cell.col === elCol)) {
-            stacked.push(matrix[elRow - 1][elCol]);
-            onStack(elRow - 1, elCol);
+        const top = matrix[elRow - 1] && matrix[elRow - 1][elCol];
+        if (top && visited.indexOf(top) === -1 && !top.isBlocked) {
+            stacked.push(top);
+            onStack(top.row, top.col);
         }
 
-        if (elCol + 1 < matrix[0].length && !visited.find((cell) => cell.row === elRow && cell.col === elCol + 1)) {
-            stacked.push(matrix[elRow][elCol + 1]);
-            onStack(elRow, elCol + 1);
+        const right = matrix[elRow][elCol + 1];
+        if (right && visited.indexOf(right) === -1 && !right.isBlocked) {
+            stacked.push(right);
+            onStack(right.row, right.col);
         }
 
-        if (elRow + 1 < matrix.length && !visited.find((cell) => cell.row === elRow + 1 && cell.col === elCol)) {
-            stacked.push(matrix[elRow + 1][elCol]);
-            onStack(elRow + 1, elCol);
+        const bottom = matrix[elRow + 1] && matrix[elRow + 1][elCol];
+        if (bottom && visited.indexOf(bottom) === -1 && !bottom.isBlocked) {
+            stacked.push(bottom);
+            onStack(bottom.row, bottom.col);
         }
 
-        if (elCol - 1 >= 0 && !visited.find((cell) => cell.row === elRow && cell.col === elCol - 1)) {
-            stacked.push(matrix[elRow][elCol - 1]);
-            onStack(elRow, elCol - 1);
+        const left = matrix[elRow][elCol - 1];
+        if (left && visited.indexOf(left) === -1 && !left.isBlocked) {
+            stacked.push(left);
+            onStack(left.row, left.col);
         }
 
         dfs(visited, stacked);
